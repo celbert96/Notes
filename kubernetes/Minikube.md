@@ -32,6 +32,9 @@ When you deploy applications on K8s, you tell the control plane to start the app
 
 > To stop the proxy, run Ctrl+C to exit the process. After the command exits, the dashboard remains running in the Kubernetes cluster. You can run the dashboard command again to create another proxy to access the dashboard.
 
+### Use minikube docker registry
+`eval $(minikube docker-env)`
+
 ### Create a Deployment
 A Kubernetes **Pod** is a group of one or more Containers, tied together for the purposes of administration and networking 
 
@@ -70,7 +73,7 @@ A Kubernetes **Deployment** checks on the health of your pod and restarts the po
 
 5. View the kubectl configuration
 
-    `kubectl view config`
+    `kubectl config view`
 
 6. View application logs for a container in a pod (replace pod name with the one you got from kubectl get pods)
 
@@ -85,3 +88,39 @@ A Kubernetes **Deployment** checks on the health of your pod and restarts the po
     ```
 
 > **Note**: For more information about kubectl commands, see the kubectl overview.
+
+### Create a Service
+By default, the Pod is only accessible by its internal IP address within the Kubernetes cluster. To make a Container accessible from outside the Kubernetes virtual network, you have to expose the Pod as a Kubernetes Service.
+
+1. Expose the Pod to the public internet using the kubectl expose command:
+
+    `kubectl expose deployment {deployment-name} --type=LoadBalancer --port=8080`
+
+    > The --type=LoadBalancer flag indicates that you want to expose your Service outside of the cluster.
+
+    > The application code inside the test image only listens on TCP port 8080. If you used kubectl expose to expose a different port, clients could not connect to that other port.
+
+2. View the service you created
+    
+    `kubectl get services`
+
+    The output is similar to
+
+    ```
+    NAME         TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+    hello-node   LoadBalancer   10.108.144.78   <pending>     8080:30369/TCP   21s
+    kubernetes   ClusterIP      10.96.0.1       <none>        443/TCP   
+    ```
+
+3. Run the following command:
+
+    `minikube service {service-name}`
+
+    This command opens up the browser and serves your app
+
+
+### Other Commands
+
+- Use minikube's docker registry
+
+    `eval $(minikube docker-env)`
