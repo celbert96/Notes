@@ -123,4 +123,13 @@ By default, the Pod is only accessible by its internal IP address within the Kub
 
 - Use minikube's docker registry
 
-    `eval $(minikube docker-env)`
+    ```
+   eval $(minikube docker-env)
+   ```
+
+
+- Port forward
+
+   ```
+   kubectl port-forward service/{service-name} hostPort:sericePort -n {namespace}
+   ```
