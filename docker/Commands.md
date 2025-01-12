@@ -19,3 +19,8 @@
 
 ### List Running Containers
 `docker ps`
+
+### Login to an External Service (GHCR)
+`echo $GHCR_PAT | docker login ghcr.io -u {github-username} --password-stdin`
+
+where `$GHCR_PAT` is the GitHub Personal Access Token
